@@ -57,7 +57,7 @@ jobs:
       run: git tag -f $VERSION
 
     - name: Push tag
-      run: git push -f $VERSION
+      run: git push -f origin $VERSION
 
 
   build-deploy:
