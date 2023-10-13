@@ -63,7 +63,7 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     name: Build & Deploy
-    needs: add-version
+    needs: [check-version, add-version]
     env:
       VERSION: ${{ needs.check-version.outputs.version }}
 
