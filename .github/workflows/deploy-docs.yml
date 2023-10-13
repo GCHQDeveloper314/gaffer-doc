@@ -64,6 +64,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Build & Deploy
     needs: add-version
+    env:
+      VERSION: ${{ needs.check-version.outputs.version }}
 
     steps:
     - uses: actions/checkout@v3
@@ -79,10 +81,10 @@ jobs:
     - name: Install dependencies
       run: pip install -r requirements.txt
 
-    - name: Configure git and fetch gh-pages
+    - name: Configure git
       run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
     - name: Build and deploy MkDocs using mike
-      run: mike deploy --push --no-redirect --update-aliases ${{ needs.check-version.outputs.version }} latest
+      run: mike deploy --push --no-redirect --update-aliases $VERSION latest
