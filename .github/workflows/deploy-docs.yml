@@ -29,12 +29,12 @@ jobs:
       if: ${{ github.event_name == 'workflow_dispatch' }}
       run: echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
 
-    - name: Verify version regex
-      run: echo ${{ env.VERSION }} | grep -E '^(2)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
-
     - name: Set version output
       id: version
       run: echo "{value}={${{ env.VERSION }}}" >> $GITHUB_OUTPUT
+
+    - name: Verify version regex is for a 2.x.x release
+      run: echo ${{ env.VERSION }} | grep -E '^(2)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
 
   add-version:
     runs-on: ubuntu-latest
