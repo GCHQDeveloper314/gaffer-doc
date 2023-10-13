@@ -31,16 +31,18 @@ jobs:
 
     - name: Set version output
       id: version
-      run: echo "{value}={${{ env.VERSION }}}" >> $GITHUB_OUTPUT
+      run: echo "value=$VERSION" >> $GITHUB_OUTPUT
 
     - name: Verify version regex is for a 2.x.x release
-      run: echo ${{ env.VERSION }} | grep -E '^(2)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
+      run: echo $VERSION | grep -E '^(2)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
 
   add-version:
     runs-on: ubuntu-latest
     name: Add version tag
     if: ${{ github.event_name == 'workflow_dispatch' }}
     needs: check-version
+    env:
+      VERSION: ${{ needs.check-version.outputs.version }}
 
     steps:
     - uses: actions/checkout@v3
@@ -52,10 +54,10 @@ jobs:
 
     - name: Add release tag
       # Force is used to replace any existing tag for the same version
-      run: git tag -f ${{ needs.check-version.outputs.version }}
+      run: git tag -f $VERSION
 
     - name: Push tag
-      run: git push -f origin ${{ needs.check-version.outputs.version }}
+      run: git push -f $VERSION
 
 
   build-deploy:
