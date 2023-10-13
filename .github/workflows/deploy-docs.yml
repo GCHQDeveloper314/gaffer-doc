@@ -34,7 +34,7 @@ jobs:
 
     - name: Set version output
       id: version
-      run: echo "{value}={$VERSION}" >> $GITHUB_OUTPUT
+      run: echo "{value}={${{ env.VERSION }}}" >> $GITHUB_OUTPUT
 
   add-version:
     runs-on: ubuntu-latest
@@ -61,7 +61,7 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     name: Build & Deploy
-    needs: check-version
+    needs: add-version
 
     steps:
     - uses: actions/checkout@v3
